@@ -25,6 +25,7 @@ services:
       - POOL_MODE=session
       - ADMIN_USERS=postgres
       - AUTH_TYPE=scram-sha-256
+      - MAX_CLIENT_CONN=500
 
 volumes:
   pg_data:

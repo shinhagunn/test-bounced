@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  db:
+    image: debezium/postgres:15
+    restart: always
+    volumes:
+      - ./postgresql.conf:/etc/postgresql/postgresql.conf
+      - ./pg_hba.conf:/etc/postgresql/pg_hba.conf
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123456
+
+  pgbouncer:
+    image: edoburu/pgbouncer
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "6000:5432"
+    environment:
+      - DB_USER=postgres
+      - DB_PASSWORD=123456
+      - DB_HOST=db
+      - POOL_MODE=session
+      - ADMIN_USERS=postgres
+      - AUTH_TYPE=scram-sha-256
+
+volumes:
+  pg_data:
